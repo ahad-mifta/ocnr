@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+  <circle cx="300" cy="180" r="82" fill="#aeec01"/>
+  <circle cx="135" cy="235" r="58" fill="#fff"/>
+  <circle cx="465" cy="235" r="58" fill="#fff"/>
+  <path d="M170 500V420Q170 300 300 300Q430 300 430 420V500H170Z" fill="#aeec01"/>
+  <path d="M55 500V430Q55 335 145 335Q205 335 235 382Q210 430 210 500H55Z" fill="#fff"/>
+  <path d="M390 500Q390 430 365 382Q395 335 455 335Q545 335 545 430V500H390Z" fill="#fff"/>
+</svg>
