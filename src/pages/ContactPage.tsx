@@ -1,8 +1,15 @@
-import { ArrowRight, Calendar, Mail, Paperclip, Phone } from "lucide-react";
+import { ArrowRight, Mail, Paperclip, Phone } from "lucide-react";
 import { FormEvent, useState } from "react";
+import { useCalEmbed } from "../components/CalEmbed";
 
 export function ContactPage() {
   const [sent, setSent] = useState(false);
+  useCalEmbed("inline", {
+    elementOrSelector: "#my-cal-inline-secret",
+    config: { layout: "month_view", useSlotsViewOnSmallScreen: "true", theme: "auto" },
+    calLink: "oceanier/quick-chat",
+  });
+
   const submit = (e: FormEvent) => {
     e.preventDefault();
     setSent(true);
@@ -39,6 +46,25 @@ export function ContactPage() {
               <p>{x}</p>
             </div>
           ))}
+        </div>
+      </section>
+      <section className="section section-light booking-section">
+        <div className="container contact-panel booking-panel">
+          <div className="contact-panel-head">
+            <div>
+              <p className="eyebrow eyebrow-dark">
+                <span />
+                Direct meeting
+              </p>
+              <h2>Book a 30-minute intro.</h2>
+            </div>
+            <p>Choose a time that works for you. No hard sell, just a useful first conversation.</p>
+          </div>
+          <div
+            id="my-cal-inline-secret"
+            className="booking-calendar"
+            style={{ width: "100%", height: "100%", overflow: "scroll" }}
+          />
         </div>
       </section>
       <section className="section section-light contact-section">
@@ -124,7 +150,6 @@ export function ContactPage() {
                   <textarea required rows={5} placeholder="The challenge, outcome or idea..." />
                 </label>
                 <div className="form-actions">
-                 
                   <button className="button button-navy" type="submit">
                     Send enquiry <ArrowRight size={18} />
                   </button>
@@ -132,18 +157,6 @@ export function ContactPage() {
               </form>
             )}
             <aside className="contact-side">
-              <div className="book-card">
-                <Calendar />
-                <p className="eyebrow eyebrow-dark">
-                  <span />
-                  Prefer to talk?
-                </p>
-                <h3>Book a 30-minute intro.</h3>
-                <p>Pick a time that works. No hard sell, just a useful first conversation.</p>
-                <a href="mailto:hello@oceanier.com">
-                  Choose a time <ArrowRight size={16} />
-                </a>
-              </div>
               <a href="mailto:hello@oceanier.com">
                 <Mail />
                 hello@oceanier.com
