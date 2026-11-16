@@ -1,18 +1,156 @@
+import emailjs from "@emailjs/browser";
 import { ArrowRight, Mail, Paperclip, Phone } from "lucide-react";
 import { FormEvent, useState } from "react";
 import { useCalEmbed } from "../components/CalEmbed";
 
+const EMAILJS_SERVICE_ID = "service_cvxz9fm";
+const EMAILJS_PUBLIC_KEY = "DEjXqyg_gn2ZE1nh6";
+const EMAILJS_LEAD_TEMPLATE_ID = "template_0f07aafa";
+const EMAILJS_CLIENT_TEMPLATE_ID = "template_9oig4yf";
+const EMAIL_LOGO_URL = "https://oceanier.com/assets/oceanier-logo-light.png";
+
+type ContactDetails = {
+  name: string;
+  company: string;
+  email: string;
+  phone: string;
+  service: string;
+  summary: string;
+};
+
+function escapeHtml(value: string) {
+  return value.replace(
+    /[&<>"']/g,
+    (character) =>
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;",
+      })[character] || character,
+  );
+}
+
+function createEmailHtml(details: ContactDetails, type: "client" | "lead") {
+  const isClient = type === "client";
+  const title = isClient ? "Thanks for reaching out" : "New project enquiry";
+  const intro = isClient
+    ? `Hi ${escapeHtml(details.name)}, we have received your enquiry and will be in touch within one business day.`
+    : `${escapeHtml(details.name)} has submitted a new project enquiry.`;
+  const rows = [
+    ["Name", details.name],
+    ["Company", details.company || "Not provided"],
+    ["Email", details.email],
+    ["Phone", details.phone || "Not provided"],
+    ["Primary service", details.service],
+    ["Project summary", details.summary],
+  ]
+    .map(
+      ([label, value]) => `
+        <tr>
+          <td style="padding:12px 0;color:#6b7d88;font-size:12px;vertical-align:top;width:30%;"><strong>${escapeHtml(label)}</strong></td>
+          <td style="padding:12px 0;color:#102b3f;font-size:14px;line-height:1.55;">${escapeHtml(value).replace(/\n/g, "<br />")}</td>
+        </tr>`,
+    )
+    .join("");
+
+  return `
+    <div style="margin:0;background:#eef3f5;padding:32px 16px;font-family:Arial,Helvetica,sans-serif;color:#102b3f;">
+      <div style="max-width:620px;margin:0 auto;background:#ffffff;border:1px solid #d5e0e5;border-radius:12px;overflow:hidden;">
+        <div style="padding:28px 32px;background:#00233a;">
+          <img src="${EMAIL_LOGO_URL}" alt="Oceanier" width="160" style="display:block;width:160px;height:auto;" />
+        </div>
+        <div style="padding:32px;">
+          <p style="margin:0 0 8px;color:#719500;font-size:11px;font-weight:bold;letter-spacing:1.5px;text-transform:uppercase;">${isClient ? "Project enquiry" : "New lead"}</p>
+          <h1 style="margin:0 0 16px;color:#102b3f;font-size:28px;line-height:1.2;">${title}</h1>
+          <p style="margin:0 0 24px;color:#526775;font-size:15px;line-height:1.6;">${intro}</p>
+          <table style="width:100%;border-collapse:collapse;border-top:1px solid #d5e0e5;">${rows}</table>
+          <p style="margin:28px 0 0;color:#526775;font-size:13px;line-height:1.6;">Oceanier · New York · Dhaka<br /><a href="mailto:hello@oceanier.com" style="color:#719500;">hello@oceanier.com</a></p>
+        </div>
+      </div>
+    </div>`;
+}
+
+async function sendContactEmails(details: ContactDetails) {
+  const sharedParams = {
+    name: details.name,
+    to_name: details.name,
+    from_name: "Oceanier",
+    company: details.company,
+    email: details.email,
+    user_email: details.email,
+    phone: details.phone,
+    service: details.service,
+    summary: details.summary,
+    reply_to: details.email,
+  };
+
+  await Promise.all([
+    emailjs.send(
+      EMAILJS_SERVICE_ID,
+      EMAILJS_LEAD_TEMPLATE_ID,
+      {
+        ...sharedParams,
+        to_email: "hello@oceanier.com",
+        subject: `New project enquiry from ${details.name}`,
+        message: createEmailHtml(details, "lead"),
+        html_content: createEmailHtml(details, "lead"),
+      },
+      EMAILJS_PUBLIC_KEY,
+    ),
+    emailjs.send(
+      EMAILJS_SERVICE_ID,
+      EMAILJS_CLIENT_TEMPLATE_ID,
+      {
+        ...sharedParams,
+        to_email: details.email,
+        subject: "We received your Oceanier enquiry",
+        message: createEmailHtml(details, "client"),
+        html_content: createEmailHtml(details, "client"),
+      },
+      EMAILJS_PUBLIC_KEY,
+    ),
+  ]);
+}
+
 export function ContactPage() {
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   useCalEmbed("inline", {
     elementOrSelector: "#my-cal-inline-secret",
     config: { layout: "month_view", useSlotsViewOnSmallScreen: "true", theme: "auto" },
     calLink: "oceanier/quick-chat",
   });
 
-  const submit = (e: FormEvent) => {
+  const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSent(true);
+    setSubmitError("");
+    setSubmitting(true);
+
+    const formData = new FormData(e.currentTarget);
+    const value = (name: string) => String(formData.get(name) || "").trim();
+    const details: ContactDetails = {
+      name: value("name"),
+      company: value("company"),
+      email: value("email"),
+      phone: value("phone"),
+      service: value("service"),
+      summary: value("summary"),
+    };
+
+    try {
+      await sendContactEmails(details);
+      setSent(true);
+    } catch (error) {
+      console.error("Contact form email delivery failed", error);
+      setSubmitError(
+        "We couldn't send your enquiry right now. Please try again or email hello@oceanier.com.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
   return (
     <>
@@ -133,7 +271,7 @@ export function ContactPage() {
                 </div>
                 <label className="professional-field professional-field-full">
                   <span>Primary service *</span>
-                  <select required defaultValue="">
+                  <select required defaultValue="" name="service">
                     <option value="" disabled>
                       Select a service
                     </option>
@@ -147,13 +285,20 @@ export function ContactPage() {
                 </label>
                 <label className="professional-field professional-field-full">
                   <span>Project summary *</span>
-                  <textarea required rows={5} placeholder="The challenge, outcome or idea..." />
+                  <textarea
+                    required
+                    rows={5}
+                    name="summary"
+                    placeholder="The challenge, outcome or idea..."
+                  />
                 </label>
                 <div className="form-actions">
-                  <button className="button button-navy" type="submit">
-                    Send enquiry <ArrowRight size={18} />
+                  <button className="button button-navy" type="submit" disabled={submitting}>
+                    {submitting ? "Sending enquiry..." : "Send enquiry"}{" "}
+                    {!submitting && <ArrowRight size={18} />}
                   </button>
                 </div>
+                {submitError && <p className="form-error">{submitError}</p>}
               </form>
             )}
             <aside className="contact-side">

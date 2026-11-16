@@ -10,7 +10,6 @@ import {
   ServiceGrid,
   TestimonialMarquee,
 } from "../components/Primitives";
-import { useCalEmbed } from "../components/CalEmbed";
 
 const ParticleShip = lazy(() =>
   import("../components/ParticleShip").then((module) => ({ default: module.ParticleShip })),
@@ -35,14 +34,6 @@ const trustedLogos = [
 ];
 
 export function HomePage() {
-  useCalEmbed("floatingButton", {
-    calLink: "oceanier/quick-chat",
-    config: { layout: "month_view", useSlotsViewOnSmallScreen: "true", theme: "auto" },
-    buttonColor: "#aeec01",
-    buttonTextColor: "#000000",
-    buttonText: "Book my Meeting",
-  });
-
   return (
     <>
       <section className="hero">
@@ -62,15 +53,9 @@ export function HomePage() {
             ideas into products people love.
           </p>
           <div className="button-row">
-            <button
-              className="button"
-              type="button"
-              data-cal-link="oceanier/quick-chat"
-              data-cal-namespace="secret"
-              data-cal-config='{"layout":"month_view","useSlotsViewOnSmallScreen":"true","theme":"auto"}'
-            >
+            <Link className="button" to="/contact">
               Book a Free Consultation <ArrowRight size={18} />
-            </button>
+            </Link>
             <Link className="button button-outline" to="/portfolio">
               View our work
             </Link>

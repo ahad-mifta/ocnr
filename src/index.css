@@ -3094,6 +3094,16 @@ footer {
 .contact-form .professional-field textarea:focus {
   border: 0;
 }
+.form-error {
+  margin: 18px 0 0;
+  color: #b42318;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.contact-form button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
 .budget {
   align-items: center;
   padding: 3px 0 18px;
