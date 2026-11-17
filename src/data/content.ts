@@ -93,7 +93,7 @@ export const articles = [
     category: "Engineering",
     date: "14 Mar 2026",
     title: "Designing software that is ready to scale, not just launch",
-    read: "7 min",
+    read: "10 min",
     image:
       "https://images.unsplash.com/photo-1625838144804-300f3907c110?auto=format&fit=crop&w=1000&q=80",
   },
@@ -102,7 +102,7 @@ export const articles = [
     category: "Product",
     date: "02 Mar 2026",
     title: "The hidden cost of building the wrong feature beautifully",
-    read: "5 min",
+    read: "7 min",
     image:
       "https://images.unsplash.com/photo-1681949103006-70066fb25dfe?auto=format&fit=crop&w=1000&q=80",
   },
@@ -111,7 +111,7 @@ export const articles = [
     category: "AI & Automation",
     date: "21 Feb 2026",
     title: "Where automation creates real leverage for growing teams",
-    read: "9 min",
+    read: "5 min",
     image:
       "https://images.unsplash.com/photo-1650661926447-9efb2610f64c?auto=format&fit=crop&w=1000&q=80",
   },
