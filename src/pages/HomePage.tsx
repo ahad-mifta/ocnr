@@ -31,6 +31,7 @@ const trustedLogos = [
   ["Rose", "/assets/clients/rose.svg"],
   ["Ultra", "/assets/clients/ultra.svg"],
   ["Vista", "/assets/clients/vista.svg"],
+  ["Capstan", "/assets/clients/capstan.svg"],
 ];
 
 export function HomePage() {
