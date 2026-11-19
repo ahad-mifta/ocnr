@@ -29,6 +29,7 @@ const trustedLogos = [
   ["Pilkin", "/assets/clients/pilkin.svg"],
   ["QubitShield", "/assets/clients/qubit-shield.svg"],
   ["Rose", "/assets/clients/rose.svg"],
+  ["Speed House", "/assets/clients/spd.svg"],
   ["Ultra", "/assets/clients/ultra.svg"],
   ["Vista", "/assets/clients/vista.svg"],
   ["Capstan", "/assets/clients/capstan.svg"],
