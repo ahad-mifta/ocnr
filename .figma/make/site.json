@@ -1,7 +1,14 @@
 {
-  "description": "Explore Oceanier’s website for information about its offerings, services, and brand, with clear navigation that helps visitors find what they need.",
+  "title": "Oceanier | Digital Agency for Websites, Apps & Cloud",
+  "description": "Oceanier is a digital solutions agency designing and engineering websites, mobile apps, cloud platforms and business systems for ambitious businesses.",
   "robots": {
-    "index": false
+    "index": true
+  },
+  "icons": {
+    "icon": "/favicon.png"
+  },
+  "openGraph": {
+    "image": "https://www.oceanier.com/assets/oceanier-logo-light.png"
   },
   "accessibility": {
     "addBypassLinks": false,

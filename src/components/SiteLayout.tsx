@@ -2,6 +2,7 @@ import { ArrowUp, Menu, Phone, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router";
 import { services } from "../data/content";
+import { Seo } from "./Seo";
 
 const links = [
   ["Services", "/services"],
@@ -27,6 +28,7 @@ export function SiteLayout() {
 
   return (
     <div className="site-shell">
+      <Seo />
       <div
         className="scroll-progress"
         style={{
